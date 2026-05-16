@@ -7,6 +7,7 @@ class App {
         this.ui = new UI();
         this.web3 = new Web3();
         this.game = new Game();
+        this.isGuest = false;
         
         this.init();
     }
@@ -19,7 +20,13 @@ class App {
 
         // Bind UI events
         this.ui.onConnectWallet(async () => {
+            this.isGuest = false;
             await this.web3.connect();
+            this.updateWeb3State();
+        });
+
+        this.ui.onPlayGuest(() => {
+            this.isGuest = true;
             this.updateWeb3State();
         });
 
@@ -30,7 +37,7 @@ class App {
 
         this.ui.onStartGame(() => {
             const username = this.ui.getUsername();
-            if (username && this.web3.isConnected && this.web3.isBaseNetwork) {
+            if (username && (this.isGuest || (this.web3.isConnected && this.web3.isBaseNetwork))) {
                 this.startGame();
             }
         });
@@ -41,10 +48,18 @@ class App {
         });
 
         this.ui.onCheckIn(async () => {
+            if (this.isGuest) {
+                alert('Guest Mode: Please connect your wallet to check-in on-chain!');
+                return;
+            }
             await this.web3.dailyCheckIn();
         });
 
         this.ui.onSubmitScore(async () => {
+            if (this.isGuest) {
+                alert('Guest Mode: Please connect your wallet to submit your score to the blockchain!');
+                return;
+            }
             const score = this.game.getScore();
             await this.web3.submitScore(score);
         });
@@ -56,7 +71,7 @@ class App {
 
     updateWeb3State() {
         const { isConnected, isBaseNetwork, address } = this.web3;
-        this.ui.updateWeb3Status(isConnected, isBaseNetwork, address);
+        this.ui.updateWeb3Status(isConnected, isBaseNetwork, address, this.isGuest);
     }
 
     startGame() {

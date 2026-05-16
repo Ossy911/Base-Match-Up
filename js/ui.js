@@ -4,6 +4,7 @@ export class UI {
         this.gameScreen = document.getElementById('game-screen');
         this.usernameInput = document.getElementById('username');
         this.connectBtn = document.getElementById('connect-wallet');
+        this.guestBtn = document.getElementById('play-guest');
         this.switchBtn = document.getElementById('switch-network');
         this.startBtn = document.getElementById('start-game');
         this.networkWarning = document.getElementById('network-warning');
@@ -28,6 +29,10 @@ export class UI {
 
     onConnectWallet(callback) {
         this.connectBtn.addEventListener('click', callback);
+    }
+
+    onPlayGuest(callback) {
+        this.guestBtn.addEventListener('click', callback);
     }
 
     onSwitchNetwork(callback) {
@@ -55,7 +60,15 @@ export class UI {
         this.startBtn.disabled = !username || this.startBtn.classList.contains('hidden');
     }
 
-    updateWeb3Status(isConnected, isBaseNetwork, address) {
+    updateWeb3Status(isConnected, isBaseNetwork, address, isGuest = false) {
+        if (isGuest) {
+            this.walletSection.classList.add('hidden');
+            this.networkWarning.classList.add('hidden');
+            this.startBtn.classList.remove('hidden');
+            this.validateForm();
+            return;
+        }
+
         if (!isConnected) {
             this.walletSection.classList.remove('hidden');
             this.networkWarning.classList.add('hidden');
