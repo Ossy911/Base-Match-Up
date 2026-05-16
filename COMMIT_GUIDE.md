@@ -101,3 +101,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 80. docs: update final README with game instructions
 
 - feat: add foundations for special tile system
+
+- feat: implement 4-match detection for Rocket tiles
