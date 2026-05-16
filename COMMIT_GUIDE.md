@@ -119,3 +119,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: add star calculation logic based on score performance
 
 - style: enhance success modal with animated star ratings
+
+- feat: update particle system for color-coded feedback
