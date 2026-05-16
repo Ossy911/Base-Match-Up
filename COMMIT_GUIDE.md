@@ -109,3 +109,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: add row-clearing logic for Rocket tiles
 
 - feat: add 3x3 explosion logic for Bomb tiles
+
+- style: add Rocket tile visual effects and animations
