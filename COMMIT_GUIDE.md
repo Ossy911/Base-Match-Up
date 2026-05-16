@@ -133,3 +133,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - ui: design interactive tutorial overlay for new players
 
 - feat: implement step-by-step tutorial logic
+
+- feat: add tutorial completion state persistence
