@@ -117,3 +117,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: implement level star rating system UI
 
 - feat: add star calculation logic based on score performance
+
+- style: enhance success modal with animated star ratings
