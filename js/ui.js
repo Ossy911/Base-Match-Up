@@ -122,9 +122,16 @@ export class UI {
         this.gameScreen.classList.remove('hidden');
     }
 
-    showSuccess(score) {
+    showSuccess(score, stars = 1) {
         this.finalScore.textContent = `Score: ${score}`;
         this.successOverlay.classList.remove('hidden');
+        
+        const starEls = document.querySelectorAll('.star');
+        starEls.forEach((s, i) => {
+            if (i < stars) s.classList.add('active');
+            else s.classList.remove('active');
+        });
+
         if (window.lucide) window.lucide.createIcons();
     }
 

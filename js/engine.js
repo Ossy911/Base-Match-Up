@@ -34,6 +34,48 @@ export class Game {
         this.initBoard();
     }
 
+    detectSpecialTiles(matchedIndices) {
+        // Simplified detection: if matchedIndices > 3, turn one into a special tile
+        // In a real game, we'd check for line length, but this is a good start
+        if (matchedIndices.size === 4) {
+            const idx = Array.from(matchedIndices)[0];
+            this.tiles[idx].special = 'rocket';
+        } else if (matchedIndices.size >= 5) {
+            const idx = Array.from(matchedIndices)[0];
+            this.tiles[idx].special = 'bomb';
+        }
+    }
+
+    triggerSpecialEffect(idx, specialIndices) {
+        const type = this.tiles[idx].special;
+        const row = Math.floor(idx / this.size);
+        const col = idx % this.size;
+
+        if (type === 'rocket') {
+            // Clear row
+            for (let c = 0; c < this.size; c++) specialIndices.add(row * this.size + c);
+        } else if (type === 'bomb') {
+            // Clear 3x3
+            for (let r = row - 1; r <= row + 1; r++) {
+                for (let c = col - 1; c <= col + 1; c++) {
+                    if (r >= 0 && r < this.size && c >= 0 && c < this.size) {
+                        specialIndices.add(r * this.size + c);
+                    }
+                }
+            }
+        }
+    }
+
+    fillBoard() {
+        this.board.innerHTML = '';
+        this.tiles = [];
+        for (let i = 0; i < this.size * this.size; i++) {
+            const tile = this.createTile(i);
+            this.tiles.push(tile);
+            this.board.appendChild(tile.element);
+        }
+    }
+
     initBoard() {
         this.board.innerHTML = '';
         this.tiles = [];
@@ -184,7 +226,18 @@ export class Game {
     }
 
     renderTile(tile) {
-        tile.element.className = `tile tile-${tile.type}`;
+        tile.element.className = 'tile';
+        if (tile.special) tile.element.classList.add(tile.special);
+        
+        const colors = {
+            1: '#FF5F5F', // Red
+            2: '#5FFF5F', // Green
+            3: '#5F5FFF', // Blue
+            4: '#FFFF5F', // Yellow
+            5: '#FF5FFF', // Pink
+            6: '#5FFFFF'  // Cyan
+        };
+        tile.element.style.backgroundColor = colors[tile.type] || 'transparent';
     }
 
     async checkMatches(silent = false) {
@@ -233,6 +286,10 @@ export class Game {
         if (matchedIndices.size > 0) {
             if (!silent) {
                 this.combo++;
+                
+                // Identify Special Tiles
+                this.detectSpecialTiles(matchedIndices);
+
                 this.score += matchedIndices.size * 10 * this.combo;
                 this.updateUI();
                 if (this.combo >= 2) {
@@ -253,15 +310,27 @@ export class Game {
     }
 
     async clearAndDrop(indices) {
+        const specialIndices = new Set();
+        
+        // Check for existing special tiles in the matched set
+        indices.forEach(idx => {
+            if (this.tiles[idx].special) {
+                this.triggerSpecialEffect(idx, specialIndices);
+            }
+        });
+
+        const allIndices = new Set([...indices, ...specialIndices]);
+
         // Trigger Screen Shake
         if (this.settings.shake) this.triggerShake();
         if (this.settings.sound) this.playSound(220, 'sine', 0.2); // Match sound
 
-        // Simple "drop" logic: set type to 0, then move down
-        indices.forEach(idx => {
+        // Simple "drop" logic
+        allIndices.forEach(idx => {
             const tile = this.tiles[idx];
             if (this.settings.particles) this.createParticles(tile.element);
             tile.type = 0;
+            tile.special = null;
             tile.element.classList.add('clearing');
         });
 
@@ -384,12 +453,19 @@ export class Game {
     getScore() { return this.score; }
 
     gameOver() {
-        if (this.score >= this.level * 200) {
+        const targetScore = this.level * 200;
+        if (this.score >= targetScore) {
             if (this.settings.sound) this.playSound(880, 'square', 0.5); // Win sound
-            window.app.ui.showSuccess(this.score);
+            
+            // Calculate stars
+            let stars = 1;
+            if (this.score >= targetScore * 2) stars = 3;
+            else if (this.score >= targetScore * 1.5) stars = 2;
+
+            window.app.ui.showSuccess(this.score, stars);
             this.level++;
         } else {
-            alert(`Game Over! Final Score: ${this.score}. Try again to reach ${this.level * 200}!`);
+            alert(`Game Over! Final Score: ${this.score}. Try again to reach ${targetScore}!`);
             this.start();
         }
     }

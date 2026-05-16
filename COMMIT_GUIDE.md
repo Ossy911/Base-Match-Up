@@ -99,3 +99,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 78. feat: add subtle background pulse animation
 79. style: final responsiveness pass for tablet/mobile
 80. docs: update final README with game instructions
+
+- feat: add foundations for special tile system
