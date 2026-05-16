@@ -28,6 +28,7 @@ export class UI {
         
         this.checkInBtn = document.getElementById('check-in-btn');
         this.submitScoreBtn = document.getElementById('submit-score-btn');
+        this.footer = document.querySelector('.app-footer');
         
         this.setupListeners();
     }
@@ -112,6 +113,7 @@ export class UI {
 
     hideOnboarding() {
         this.onboarding.classList.add('hidden');
+        if (this.footer) this.footer.classList.add('hidden');
     }
 
     showGameScreen() {
@@ -140,6 +142,7 @@ export class UI {
     showOnboarding() {
         this.onboarding.classList.remove('hidden');
         this.gameScreen.classList.add('hidden');
+        if (this.footer) this.footer.classList.remove('hidden');
     }
 
     updateStats(level, score, moves) {
