@@ -9,14 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- AppKit (Web3Modal) for WalletConnect -->
-    <script type="module">
-      import { createAppKit } from 'https://cdn.jsdelivr.net/npm/@reown/appkit@1.0.0/dist/appkit.js'
-      import { EthersAdapter } from 'https://cdn.jsdelivr.net/npm/@reown/appkit-adapter-ethers@1.0.0/dist/appkit-adapter-ethers.js'
-      import { base } from 'https://cdn.jsdelivr.net/npm/@reown/appkit-networks@1.0.0/dist/appkit-networks.js'
-      
-      window.AppKit = { createAppKit, EthersAdapter, base };
-    </script>
+    <!-- Web3-Onboard for Universal Wallet Support -->
+    <script src="https://unpkg.com/@web3-onboard/core@latest"></script>
+    <script src="https://unpkg.com/@web3-onboard/injected-wallets@latest"></script>
+    <script src="https://unpkg.com/@web3-onboard/walletconnect@latest"></script>
 </head>
 <body>
     <div id="app" class="app-container">
