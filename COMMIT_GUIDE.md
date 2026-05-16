@@ -113,3 +113,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - style: add Rocket tile visual effects and animations
 
 - style: add Bomb tile visual effects and glow
+
+- feat: implement level star rating system UI
