@@ -40,6 +40,44 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+}
+
+/* News Ticker */
+.news-ticker {
+    background: rgba(0, 0, 0, 0.4);
+    height: 32px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--glass-border);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--primary-light);
+    z-index: 1000;
+}
+
+.ticker-content {
+    display: inline-block;
+    padding-left: 100%;
+    animation: ticker 25s linear infinite;
+}
+
+.ticker-content span {
+    display: inline-block;
+    padding-right: 50px;
+}
+
+.ticker-content span:before {
+    content: "•";
+    padding-right: 10px;
+}
+
+@keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
 }
 
 /* Glassmorphism */
