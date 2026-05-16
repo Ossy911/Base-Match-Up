@@ -131,3 +131,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: add bonus score multiplier for high streaks
 
 - ui: design interactive tutorial overlay for new players
+
+- feat: implement step-by-step tutorial logic
