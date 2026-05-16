@@ -135,3 +135,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: implement step-by-step tutorial logic
 
 - feat: add tutorial completion state persistence
+
+- ui: add global leaderboard mock-up UI
