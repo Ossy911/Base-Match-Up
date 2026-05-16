@@ -105,3 +105,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: implement 4-match detection for Rocket tiles
 
 - feat: implement 5-match detection for Bomb tiles
+
+- feat: add row-clearing logic for Rocket tiles
