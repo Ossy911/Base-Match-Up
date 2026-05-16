@@ -105,6 +105,19 @@ body {
     color: white; 
 }
 
+.btn-icon {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+}
+
 /* Onboarding */
 .onboarding-content {
     padding: 40px 30px;
@@ -292,6 +305,78 @@ body {
     font-size: 18px;
     color: var(--text-dim);
     margin-bottom: 30px;
+}
+
+/* Settings */
+.settings-content {
+    padding: 30px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.settings-list {
+    margin: 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+}
+
+/* Switch Toggle */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: .4s;
+    border-radius: 34px;
+    border: 1px solid var(--glass-border);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider { background-color: var(--success); }
+input:checked + .slider:before { transform: translateX(24px); }
+
+/* Footer */
+.app-footer {
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-dim);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.author {
+    font-weight: 600;
+    color: white;
 }
 
 /* Utilities */

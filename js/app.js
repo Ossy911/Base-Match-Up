@@ -8,6 +8,7 @@ class App {
         this.web3 = new Web3();
         this.game = new Game();
         this.isGuest = false;
+        this.settings = { sound: true, shake: true, particles: true };
         
         this.init();
     }
@@ -45,6 +46,18 @@ class App {
         this.ui.onNextLevel(() => {
             this.ui.hideSuccess();
             this.game.start();
+        });
+
+        this.ui.onQuitGame(() => {
+            if (confirm('Are you sure you want to quit? Your current score will be lost.')) {
+                this.ui.hideSettings();
+                this.ui.showOnboarding();
+            }
+        });
+
+        this.ui.onSettingsChange((key, value) => {
+            this.settings[key] = value;
+            this.game.updateSettings(this.settings);
         });
 
         this.ui.onCheckIn(async () => {

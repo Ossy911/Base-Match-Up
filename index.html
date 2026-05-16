@@ -60,6 +60,38 @@
             </div>
         </div>
 
+        <!-- Settings Overlay -->
+        <div id="settings-overlay" class="overlay hidden">
+            <div class="glass-card settings-content">
+                <h2 class="title">Settings</h2>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <span>Sound Effects</span>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-sound" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <span>Screen Shake</span>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-shake" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <span>Particle Effects</span>
+                        <label class="switch">
+                            <input type="checkbox" id="setting-particles" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <button id="close-settings" class="btn btn-primary">Close</button>
+                <button id="quit-game" class="btn btn-outline" style="color: var(--error); border-color: var(--error); margin-top: 12px;">Quit Game</button>
+            </div>
+        </div>
+
         <!-- Game Screen -->
         <main id="game-screen" class="hidden">
             <header class="game-header">
@@ -75,6 +107,9 @@
                     <span class="label">Moves</span>
                     <span id="moves-display" class="value">20</span>
                 </div>
+                <button id="open-settings" class="btn-icon">
+                    <i data-lucide="settings"></i>
+                </button>
             </header>
 
             <div class="board-container">
@@ -92,6 +127,11 @@
                 </button>
             </footer>
         </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            Made with ❤️ by <span class="author">Osita Daniel Ezenwoye</span>
+        </footer>
 
         <!-- Notification System -->
         <div id="notification-container"></div>

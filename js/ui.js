@@ -7,6 +7,15 @@ export class UI {
         this.guestBtn = document.getElementById('play-guest');
         this.switchBtn = document.getElementById('switch-network');
         this.startBtn = document.getElementById('start-game');
+        this.openSettingsBtn = document.getElementById('open-settings');
+        this.closeSettingsBtn = document.getElementById('close-settings');
+        this.quitGameBtn = document.getElementById('quit-game');
+        this.settingsOverlay = document.getElementById('settings-overlay');
+        
+        this.soundSwitch = document.getElementById('setting-sound');
+        this.shakeSwitch = document.getElementById('setting-shake');
+        this.particlesSwitch = document.getElementById('setting-particles');
+
         this.networkWarning = document.getElementById('network-warning');
         this.walletSection = document.getElementById('wallet-section');
         this.successOverlay = document.getElementById('success-overlay');
@@ -25,6 +34,8 @@ export class UI {
 
     setupListeners() {
         this.usernameInput.addEventListener('input', () => this.validateForm());
+        this.openSettingsBtn.addEventListener('click', () => this.showSettings());
+        this.closeSettingsBtn.addEventListener('click', () => this.hideSettings());
     }
 
     onConnectWallet(callback) {
@@ -53,6 +64,16 @@ export class UI {
 
     onNextLevel(callback) {
         this.nextLevelBtn.addEventListener('click', callback);
+    }
+
+    onQuitGame(callback) {
+        this.quitGameBtn.addEventListener('click', callback);
+    }
+
+    onSettingsChange(callback) {
+        this.soundSwitch.addEventListener('change', () => callback('sound', this.soundSwitch.checked));
+        this.shakeSwitch.addEventListener('change', () => callback('shake', this.shakeSwitch.checked));
+        this.particlesSwitch.addEventListener('change', () => callback('particles', this.particlesSwitch.checked));
     }
 
     validateForm() {
@@ -105,6 +126,20 @@ export class UI {
 
     hideSuccess() {
         this.successOverlay.classList.add('hidden');
+    }
+
+    showSettings() {
+        this.settingsOverlay.classList.remove('hidden');
+        if (window.lucide) window.lucide.createIcons();
+    }
+
+    hideSettings() {
+        this.settingsOverlay.classList.add('hidden');
+    }
+
+    showOnboarding() {
+        this.onboarding.classList.remove('hidden');
+        this.gameScreen.classList.add('hidden');
     }
 
     updateStats(level, score, moves) {

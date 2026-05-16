@@ -11,6 +11,9 @@ export class Game {
         this.selectedTile = null;
         this.isProcessing = false;
 
+        // Settings
+        this.settings = { sound: true, shake: true, particles: true };
+
         // Sound
         this.audioCtx = null;
 
@@ -68,7 +71,7 @@ export class Game {
             const second = this.tiles[index];
             
             if (this.isAdjacent(first.index, second.index)) {
-                this.playSound(440, 'triangle', 0.1); // Swap sound
+                if (this.settings.sound) this.playSound(440, 'triangle', 0.1); // Swap sound
                 this.swapTiles(first, second);
             }
             
@@ -245,13 +248,13 @@ export class Game {
 
     async clearAndDrop(indices) {
         // Trigger Screen Shake
-        this.triggerShake();
-        this.playSound(220, 'sine', 0.2); // Match sound
+        if (this.settings.shake) this.triggerShake();
+        if (this.settings.sound) this.playSound(220, 'sine', 0.2); // Match sound
 
         // Simple "drop" logic: set type to 0, then move down
         indices.forEach(idx => {
             const tile = this.tiles[idx];
-            this.createParticles(tile.element);
+            if (this.settings.particles) this.createParticles(tile.element);
             tile.type = 0;
             tile.element.classList.add('clearing');
         });
@@ -333,6 +336,10 @@ export class Game {
         setTimeout(() => this.board.classList.remove('shake'), 300);
     }
 
+    updateSettings(newSettings) {
+        this.settings = { ...this.settings, ...newSettings };
+    }
+
     playSound(freq, type, duration) {
         if (!this.audioCtx) return;
         const osc = this.audioCtx.createOscillator();
@@ -357,7 +364,7 @@ export class Game {
 
     gameOver() {
         if (this.score >= this.level * 200) {
-            this.playSound(880, 'square', 0.5); // Win sound
+            if (this.settings.sound) this.playSound(880, 'square', 0.5); // Win sound
             window.app.ui.showSuccess(this.score);
             this.level++;
         } else {
