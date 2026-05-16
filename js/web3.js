@@ -2,71 +2,72 @@
 const BASE_CHAIN_ID = 8453;
 const BUILDER_CODE = 'bc_sjkexp2o';
 const ENCODED_BUILDER_STRING = '0x62635f736a6b657870326f0b0080218021802180218021802180218021v';
+const PROJECT_ID = '494191a62d02a5a560c5a054238541a7'; // Public placeholder ID
 
 export class Web3 {
     constructor() {
         this.address = null;
         this.isConnected = false;
         this.isBaseNetwork = false;
-        this.provider = window.ethereum;
+        this.modal = null;
+        this.init();
     }
 
-    async connect() {
-        if (!this.provider) {
-            alert('Please install a wallet like MetaMask or use the Base app.');
+    async init() {
+        // Wait for AppKit to load from index.html
+        if (!window.AppKit) {
+            setTimeout(() => this.init(), 100);
             return;
         }
 
-        try {
-            const accounts = await this.provider.request({ method: 'eth_requestAccounts' });
-            this.address = accounts[0];
-            this.isConnected = true;
-            await this.checkNetwork();
-        } catch (error) {
-            console.error('Connection error:', error);
-        }
+        const { createAppKit, EthersAdapter, base } = window.AppKit;
+
+        this.modal = createAppKit({
+            adapters: [new EthersAdapter()],
+            networks: [base],
+            metadata: {
+                name: 'Base Match Up',
+                description: 'Match-3 game on Base L2',
+                url: window.location.origin,
+                icons: ['https://avatars.githubusercontent.com/u/37784886']
+            },
+            projectId: PROJECT_ID,
+            features: {
+                analytics: true
+            }
+        });
+
+        // Listen for state changes
+        this.modal.subscribeState(state => {
+            this.address = this.modal.getAddress();
+            this.isConnected = this.modal.getIsConnectedTracker();
+            this.checkNetwork();
+        });
+    }
+
+    async connect() {
+        if (!this.modal) return;
+        await this.modal.open();
     }
 
     async checkNetwork() {
-        if (!this.provider) return;
-        const chainId = await this.provider.request({ method: 'eth_chainId' });
-        this.isBaseNetwork = parseInt(chainId, 16) === BASE_CHAIN_ID;
+        if (!this.modal) return;
+        const network = this.modal.getNetwork();
+        this.isBaseNetwork = network?.id === BASE_CHAIN_ID;
     }
 
     async switchToBase() {
-        if (!this.provider) return;
-        try {
-            await this.provider.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: `0x${BASE_CHAIN_ID.toString(16)}` }],
-            });
-            await this.checkNetwork();
-        } catch (switchError) {
-            // This error code indicates that the chain has not been added to MetaMask.
-            if (switchError.code === 4902) {
-                try {
-                    await this.provider.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [{
-                            chainId: `0x${BASE_CHAIN_ID.toString(16)}`,
-                            chainName: 'Base',
-                            nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
-                            rpcUrls: ['https://mainnet.base.org'],
-                            blockExplorerUrls: ['https://basescan.org'],
-                        }],
-                    });
-                } catch (addError) {
-                    console.error('Failed to add Base network:', addError);
-                }
-            }
-        }
+        if (!this.modal) return;
+        await this.modal.switchNetwork(BASE_CHAIN_ID);
     }
 
     async dailyCheckIn() {
         if (!this.isConnected || !this.isBaseNetwork) return;
 
         try {
-            // Daily check-in: Send a 0 ETH transaction to self with Builder Code suffix
+            const provider = this.modal.getWalletProvider();
+            if (!provider) return;
+
             const tx = {
                 from: this.address,
                 to: this.address,
@@ -74,16 +75,14 @@ export class Web3 {
                 data: ENCODED_BUILDER_STRING,
             };
 
-            const txHash = await this.provider.request({
+            const txHash = await provider.request({
                 method: 'eth_sendTransaction',
                 params: [tx],
             });
 
-            console.log('Check-in tx hash:', txHash);
             alert(`Daily check-in successful! View on Basescan: https://basescan.org/tx/${txHash}`);
         } catch (error) {
             console.error('Check-in failed:', error);
-            alert('Check-in transaction rejected or failed.');
         }
     }
 
@@ -91,8 +90,9 @@ export class Web3 {
         if (!this.isConnected || !this.isBaseNetwork) return;
 
         try {
-            // Simple score submission using the same Builder Code attribution pattern
-            // We could encode the score in the data, but for now we prioritize attribution.
+            const provider = this.modal.getWalletProvider();
+            if (!provider) return;
+
             const tx = {
                 from: this.address,
                 to: this.address,
@@ -100,12 +100,11 @@ export class Web3 {
                 data: ENCODED_BUILDER_STRING, 
             };
 
-            const txHash = await this.provider.request({
+            const txHash = await provider.request({
                 method: 'eth_sendTransaction',
                 params: [tx],
             });
 
-            console.log('Score submission tx hash:', txHash);
             alert(`Score submitted successfully! Hash: ${txHash}`);
         } catch (error) {
             console.error('Score submission failed:', error);
