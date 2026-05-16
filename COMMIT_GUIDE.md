@@ -141,3 +141,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: implement local score persistence for leaderboard
 
 - refactor: balance level difficulty and move limits
+
+- docs: update documentation with new special tile guide
