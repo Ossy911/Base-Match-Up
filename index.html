@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Base Match Up</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Viem for Web3 -->
+    <script src="https://cdn.jsdelivr.net/npm/viem@latest/dist/viem.umd.min.js" type="module"></script>
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Onboarding Overlay -->
+        <div id="onboarding" class="overlay">
+            <div class="glass-card onboarding-content">
+                <h1 class="title">Base Match Up</h1>
+                <p class="subtitle">Connect your wallet and match tiles on Base L2!</p>
+                
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your name..." autocomplete="off">
+                </div>
+
+                <div id="wallet-section">
+                    <button id="connect-wallet" class="btn btn-primary">
+                        <i data-lucide="wallet"></i>
+                        Connect Wallet
+                    </button>
+                </div>
+
+                <div id="network-warning" class="warning hidden">
+                    <p>Please switch to <strong>Base Network</strong></p>
+                    <button id="switch-network" class="btn btn-warning">Switch to Base</button>
+                </div>
+
+                <button id="start-game" class="btn btn-success hidden" disabled>
+                    <i data-lucide="play"></i>
+                    Start Game
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Overlay -->
+        <div id="success-overlay" class="overlay hidden">
+            <div class="glass-card success-content">
+                <i data-lucide="party-popper" class="success-icon"></i>
+                <h2 class="success-title">Level Complete!</h2>
+                <p id="final-score-display">Score: 0</p>
+                <button id="next-level-btn" class="btn btn-success">Next Level</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <main id="game-screen" class="hidden">
+            <header class="game-header">
+                <div class="stat-box">
+                    <span class="label">Level</span>
+                    <span id="level-display" class="value">1</span>
+                </div>
+                <div class="stat-box">
+                    <span class="label">Score</span>
+                    <span id="score-display" class="value">0</span>
+                </div>
+                <div class="stat-box highlight">
+                    <span class="label">Moves</span>
+                    <span id="moves-display" class="value">20</span>
+                </div>
+            </header>
+
+            <div class="board-container">
+                <div id="game-board" class="game-board"></div>
+            </div>
+
+            <footer class="game-footer">
+                <button id="check-in-btn" class="btn btn-outline">
+                    <i data-lucide="calendar-check"></i>
+                    Daily Check-in
+                </button>
+                <button id="submit-score-btn" class="btn btn-outline">
+                    <i data-lucide="send"></i>
+                    Submit Score
+                </button>
+            </footer>
+        </main>
+
+        <!-- Notification System -->
+        <div id="notification-container"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/ui.js" type="module"></script>
+    <script src="js/web3.js" type="module"></script>
+    <script src="js/engine.js" type="module"></script>
+    <script src="js/app.js" type="module"></script>
+</body>
+</html>
