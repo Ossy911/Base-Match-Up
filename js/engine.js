@@ -114,6 +114,7 @@ export class Game {
         }
 
         if (targetIndex >= 0 && targetIndex < this.size * this.size) {
+            this.playSound(440, 'triangle', 0.1);
             this.swapTiles(this.tiles[index], this.tiles[targetIndex]);
         }
         
@@ -129,9 +130,19 @@ export class Game {
     }
 
     async swapTiles(t1, t2) {
+        if (this.isProcessing) return;
         this.isProcessing = true;
         
-        // Swap types and classes
+        // Visual swap
+        t1.element.style.transform = `translate(${t2.element.offsetLeft - t1.element.offsetLeft}px, ${t2.element.offsetTop - t1.element.offsetTop}px)`;
+        t2.element.style.transform = `translate(${t1.element.offsetLeft - t2.element.offsetLeft}px, ${t1.element.offsetTop - t2.element.offsetTop}px)`;
+
+        await new Promise(r => setTimeout(r, 300));
+
+        // Reset transforms and swap types
+        t1.element.style.transform = '';
+        t2.element.style.transform = '';
+        
         const tempType = t1.type;
         t1.type = t2.type;
         t2.type = tempType;
@@ -142,7 +153,15 @@ export class Game {
         const hasMatches = await this.checkMatches();
         
         if (!hasMatches) {
-            // Undo swap
+            // Undo visual swap
+            t1.element.style.transform = `translate(${t2.element.offsetLeft - t1.element.offsetLeft}px, ${t2.element.offsetTop - t1.element.offsetTop}px)`;
+            t2.element.style.transform = `translate(${t1.element.offsetLeft - t2.element.offsetLeft}px, ${t1.element.offsetTop - t2.element.offsetTop}px)`;
+            
+            await new Promise(r => setTimeout(r, 200));
+            
+            t1.element.style.transform = '';
+            t2.element.style.transform = '';
+            
             const tempTypeBack = t1.type;
             t1.type = t2.type;
             t2.type = tempTypeBack;
