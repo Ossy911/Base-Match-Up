@@ -123,3 +123,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: update particle system for color-coded feedback
 
 - feat: add particle density control to settings
+
+- feat: implement daily reward streak data structure
