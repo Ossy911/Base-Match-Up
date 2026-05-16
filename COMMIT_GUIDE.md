@@ -127,3 +127,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: implement daily reward streak data structure
 
 - ui: add daily streak display to onboarding screen
+
+- feat: add bonus score multiplier for high streaks
