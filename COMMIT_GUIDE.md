@@ -103,3 +103,5 @@ To reach your goal of 80 commits, use the following logical steps. Each group re
 - feat: add foundations for special tile system
 
 - feat: implement 4-match detection for Rocket tiles
+
+- feat: implement 5-match detection for Bomb tiles
