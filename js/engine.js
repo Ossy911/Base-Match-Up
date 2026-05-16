@@ -10,6 +10,7 @@ export class Game {
         
         this.selectedTile = null;
         this.isProcessing = false;
+        this.combo = 0;
 
         // Settings
         this.settings = { sound: true, shake: true, particles: true };
@@ -156,6 +157,7 @@ export class Game {
         const hasMatches = await this.checkMatches();
         
         if (!hasMatches) {
+            this.combo = 0;
             // Undo visual swap
             t1.element.style.transform = `translate(${t2.element.offsetLeft - t1.element.offsetLeft}px, ${t2.element.offsetTop - t1.element.offsetTop}px)`;
             t2.element.style.transform = `translate(${t1.element.offsetLeft - t2.element.offsetLeft}px, ${t1.element.offsetTop - t2.element.offsetTop}px)`;
@@ -230,8 +232,12 @@ export class Game {
 
         if (matchedIndices.size > 0) {
             if (!silent) {
-                this.score += matchedIndices.size * 10;
+                this.combo++;
+                this.score += matchedIndices.size * 10 * this.combo;
                 this.updateUI();
+                if (this.combo >= 2) {
+                    this.showMegaCaption();
+                }
                 await this.clearAndDrop(matchedIndices);
             } else {
                 // For initial generation, just randomize matched tiles
@@ -287,6 +293,21 @@ export class Game {
 
         // Chain reaction
         await this.checkMatches();
+    }
+
+    showMegaCaption() {
+        const container = document.getElementById('caption-container');
+        const captions = ['STAY BASED', 'BASE-D!', 'MEGA COMBO!', 'ON CHAIN!', 'L2 SPEED!', 'BASED AF'];
+        const text = captions[Math.floor(Math.random() * captions.length)];
+        
+        const el = document.createElement('div');
+        el.className = 'mega-caption';
+        el.textContent = text;
+        container.appendChild(el);
+        
+        if (this.settings.sound) this.playSound(660, 'square', 0.3);
+        
+        setTimeout(() => el.remove(), 800);
     }
 
     createParticles(element) {

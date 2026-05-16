@@ -416,3 +416,30 @@ input:checked + .slider:before { transform: translateX(24px); }
 .shake {
     animation: shake 0.2s ease-in-out;
 }
+
+/* Mega Captions */
+.caption-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+
+.mega-caption {
+    font-size: 48px;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    animation: mega-pop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes mega-pop {
+    0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+    50% { transform: scale(1.2) rotate(5deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 0; }
+}
